@@ -14,7 +14,7 @@ public interface ITransportationController {
     ResponseEntity<Boolean> createTransportation(@RequestBody TransportationRequest request);
 
     @GetMapping(value = "/get", produces = APPLICATION_JSON_VALUE)
-    ResponseEntity<TransportationResponse> getLocations(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size);
+    ResponseEntity<TransportationResponse> getTransportations(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size);
 
     @GetMapping(value = "/getById", produces = APPLICATION_JSON_VALUE)
     ResponseEntity<TransportationDto> getTransportaionById(@RequestParam("id") Long id);

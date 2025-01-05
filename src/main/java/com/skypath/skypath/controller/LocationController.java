@@ -6,9 +6,8 @@ import com.skypath.skypath.request.LocationRequest;
 import com.skypath.skypath.response.LocationResponse;
 import com.skypath.skypath.service.LocationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
@@ -18,13 +17,13 @@ public class LocationController implements ILocationController {
     private final LocationService locationService;
 
     @Override
-    public ResponseEntity<Boolean> createLocation(@RequestBody LocationRequest request) {
+    public ResponseEntity<Boolean> createLocation(LocationRequest request) {
         return ResponseEntity.ok(locationService.createLocation(request));
     }
 
     @Override
     public ResponseEntity<LocationResponse> getLocations(int page, int size) {
-        return ResponseEntity.ok(locationService.getAllLocations(page,size));
+        return ResponseEntity.ok(locationService.getAllLocations(page, size));
     }
 
     @Override
@@ -34,7 +33,7 @@ public class LocationController implements ILocationController {
 
     @Override
     public ResponseEntity<Boolean> updateLocation(Long id, LocationDto dto) {
-        return ResponseEntity.ok(locationService.updateLocation(id,dto));
+        return ResponseEntity.ok(locationService.updateLocation(id, dto));
     }
 
     @Override
@@ -42,7 +41,6 @@ public class LocationController implements ILocationController {
         locationService.deleteLocation(id);
         return ResponseEntity.noContent().build();
     }
-
 
 
 }

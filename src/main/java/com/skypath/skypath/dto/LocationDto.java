@@ -1,6 +1,7 @@
 package com.skypath.skypath.dto;
 
-import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,12 +14,22 @@ import java.time.OffsetDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LocationDto {
-    private Long id;
+    @NotNull(message = "Location name cannot be null.")
+    @Size(min = 3, max = 255, message = "Location name must be between 3 and 255 characters.")
     private String name;
-    private Integer type; // 1: FROM, 2: TO
+
+    @NotNull(message = "Location type is required.")
+    private Integer type;
+
+    private Long id;
+
     private Integer isDeleted;
+
     private String createdBy;
+
     private OffsetDateTime createDate;
+
     private String updatedBy;
-    private OffsetDateTime  updateDate;
+
+    private OffsetDateTime updateDate;
 }

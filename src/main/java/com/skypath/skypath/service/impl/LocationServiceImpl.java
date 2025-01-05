@@ -16,7 +16,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,10 +26,14 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public Boolean createLocation(LocationRequest request) {
-       Location location = locationMapper.toEntity(request);
+        if (locationRepository.existsByNameAndType(request.getName(), request.getType())) {
+            throw new IllegalArgumentException("Location with the same name and type already exists.");
+        }
+        Location location = locationMapper.toEntity(request);
         locationRepository.save(location);
         return true;
     }
+
 
     @Override
     public LocationResponse getAllLocations(int page, int size) {
@@ -38,15 +41,15 @@ public class LocationServiceImpl implements LocationService {
         Page<Location> locationPage = locationRepository.findAll(pageable);
         List<LocationDto> locationDtoList = locationMapper.toDtoList(locationPage.getContent());
 
-        return new LocationResponse(locationDtoList,locationPage.getTotalElements(),locationPage.getTotalPages());
+        return new LocationResponse(locationDtoList, locationPage.getTotalElements(), locationPage.getTotalPages());
     }
 
 
     @Override
     public LocationDto getLocationById(Long id) {
         Location location = locationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Location not found"));;
-        return  locationMapper.toDto(location);
+                .orElseThrow(() -> new RuntimeException("Location not found"));
+        return locationMapper.toDto(location);
     }
 
     @Override

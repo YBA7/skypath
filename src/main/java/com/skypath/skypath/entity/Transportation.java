@@ -1,8 +1,10 @@
 package com.skypath.skypath.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.Where;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.OffsetDateTime;
 
@@ -28,7 +30,7 @@ public class Transportation {
     private Location destination;
 
     @Column(name = "transportation_type")
-    private Integer transportationType; // 1: FLIGHT, 2: OTHER
+    private Integer transportationType;
 
     @Column(name = "is_deleted")
     private Integer isDeleted;

@@ -5,6 +5,7 @@ import com.skypath.skypath.dto.TransportationDto;
 import com.skypath.skypath.request.TransportationRequest;
 import com.skypath.skypath.response.TransportationResponse;
 import com.skypath.skypath.service.TransportationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,13 +17,13 @@ public class TransportationController implements ITransportationController {
     private final TransportationService transportationService;
 
     @Override
-    public ResponseEntity<Boolean> createTransportation(@RequestBody TransportationRequest request) {
+    public ResponseEntity<Boolean> createTransportation(@RequestBody @Valid TransportationRequest request) {
         return ResponseEntity.ok(transportationService.createTransportation(request));
     }
 
     @Override
-    public ResponseEntity<TransportationResponse> getLocations(int page, int size) {
-        return ResponseEntity.ok(transportationService.getAllLocations(page, size));
+    public ResponseEntity<TransportationResponse> getTransportations(int page, int size) {
+        return ResponseEntity.ok(transportationService.getAllTransportations(page, size));
     }
 
     @Override

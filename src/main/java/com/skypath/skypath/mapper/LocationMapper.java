@@ -65,7 +65,6 @@ public class LocationMapper {
         location.setType(dto.getType());
         location.setUpdateDate(OffsetDateTime.now());
         String username = getAuthenticatedUsername();
-        ;
         location.setUpdatedBy(username);
     }
 

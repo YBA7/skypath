@@ -1,5 +1,6 @@
 package com.skypath.skypath.request;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TransportationRequest {
-    private Long originId;         // Başlangıç noktasının ID'si (Location ID)
-    private Long destinationId;    // Varış noktasının ID'si (Location ID)
-    private Integer transportationType; // Taşımacılık tipi (1: FLIGHT, 2: OTHER)
+    @NotNull(message = "originId cannot be null.")
+    private Long originId;
+    @NotNull(message = "destinationId cannot be null.")
+    private Long destinationId;
+    @NotNull(message = "transportationType cannot be null.")
+    private Integer transportationType;
 }

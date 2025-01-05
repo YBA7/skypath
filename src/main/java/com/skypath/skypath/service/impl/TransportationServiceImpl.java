@@ -39,7 +39,7 @@ public class TransportationServiceImpl implements TransportationService {
 
 
     @Override
-    public TransportationResponse getAllLocations(int page, int size) {
+    public TransportationResponse getAllTransportations(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         Page<Transportation> transportationPage = transportationRepository.findAll(pageable);
         List<TransportationDto> transportationDtoList = transportationMapper.toDtoList(transportationPage.getContent());

@@ -2,6 +2,7 @@ package com.skypath.skypath.service.impl;
 
 import com.skypath.skypath.dto.RouteStepDto;
 import com.skypath.skypath.entity.Transportation;
+import com.skypath.skypath.repository.LocationRepository;
 import com.skypath.skypath.repository.TransportationRepository;
 import com.skypath.skypath.response.RouteResponse;
 import com.skypath.skypath.service.RouteService;
@@ -16,6 +17,8 @@ import java.util.List;
 public class RouteServiceImpl implements RouteService {
 
     private final TransportationRepository transportationRepository;
+    private final LocationRepository locationRepository;
+
 
     @Override
     public List<RouteResponse> calculateRoutes(Long fromLocationId, Long toLocationId) {
@@ -26,6 +29,14 @@ public class RouteServiceImpl implements RouteService {
     }
 
     private void findRoutes(Long fromLocationId, Long toLocationId, List<RouteStepDto> currentPath, List<RouteResponse> routes) {
+        if (!locationRepository.existsById(fromLocationId)) {
+            throw new IllegalArgumentException("Location with ID " + fromLocationId + " does not exist.");
+        }
+
+        if (!locationRepository.existsById(toLocationId)) {
+            throw new IllegalArgumentException("Location with ID " + toLocationId + " does not exist.");
+        }
+
         List<Transportation> transportations = transportationRepository.findAll();
 
         for (Transportation transportation : transportations) {
@@ -46,4 +57,5 @@ public class RouteServiceImpl implements RouteService {
             }
         }
     }
+
 }
