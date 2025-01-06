@@ -56,6 +56,10 @@ public class LocationServiceImpl implements LocationService {
     public Boolean updateLocation(Long id, LocationDto dto) {
         Location existingLocation = locationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Location not found with id: " + id));
+        boolean isDuplicate = locationRepository.existsByNameAndTypeAndIdNot(dto.getName(), dto.getType(), id);
+        if (isDuplicate) {
+            throw new RuntimeException("Location with the same name and type already exists.");
+        }
         locationMapper.updateEntityFromDto(existingLocation, dto);
         locationRepository.save(existingLocation);
         return true;

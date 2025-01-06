@@ -25,14 +25,17 @@ public class TransportationServiceImpl implements TransportationService {
     private final TransportationMapper transportationMapper;
     private final LocationRepository locationRepository;
 
-
-    //todo unique pk koy buraya origin destination ve type
     @Override
     public Boolean createTransportation(TransportationRequest request) {
         Location origin = locationRepository.findById(request.getOriginId())
                 .orElseThrow(() -> new RuntimeException("Origin not found with id: " + request.getOriginId()));
         Location destination = locationRepository.findById(request.getDestinationId())
                 .orElseThrow(() -> new RuntimeException("Destination not found with id: " + request.getDestinationId()));
+        boolean exists = transportationRepository.existsByOriginIdAndDestinationIdAndTransportationType(
+                request.getOriginId(), request.getDestinationId(), request.getTransportationType());
+        if (exists) {
+            throw new RuntimeException("Transportation with the same origin, destination, and type already exists.");
+        }
         Transportation transportation = transportationMapper.toEntity(request, origin, destination);
         transportationRepository.save(transportation);
         return true;

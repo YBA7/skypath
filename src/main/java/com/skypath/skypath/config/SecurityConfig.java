@@ -24,67 +24,36 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
-
     @Bean
-
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
-
         http
-
                 .cors().and()
-
                 .csrf().disable()
-
                 .authorizeHttpRequests()
-
                 .requestMatchers("/auth/login", "/user/create").permitAll()
-
                 .requestMatchers("/routes/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
-
                 .anyRequest().authenticated()
-
                 .and()
-
                 .sessionManagement()
-
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-
                 .and()
-
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
-
         return http.build();
-
     }
-
 
     @Bean
-
     public CorsConfigurationSource corsConfigurationSource() {
-
         CorsConfiguration configuration = new CorsConfiguration();
-
         configuration.setAllowedOrigins(List.of("http://localhost:3000"));
-
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
-
         configuration.setExposedHeaders(List.of("Authorization"));
-
         configuration.setAllowCredentials(true);
-
-
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
         source.registerCorsConfiguration("/**", configuration);
-
         return source;
-
     }
-
+    
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepository) {
         return username -> userRepository.findByUsername(username)
@@ -106,19 +75,4 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
-
 }
-
-//@Bean
-//public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
-//  http
-//        .cors().and()
-//      .csrf().disable()
-//    .authorizeHttpRequests()
-//  .requestMatchers("/auth/login", "/user/create").permitAll()
-//.anyRequest().authenticated()
-//.and()
-//.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
-//       return http.build();
-//}
