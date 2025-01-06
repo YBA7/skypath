@@ -28,6 +28,7 @@ public class RouteServiceImpl implements RouteService {
         return routes;
     }
 
+    //todo dokümandaki gibi koşullar uymadığında hata bastırmayı unutma burada kontrolleri eklemedik henüz.
     private void findRoutes(Long fromLocationId, Long toLocationId, List<RouteStepDto> currentPath, List<RouteResponse> routes) {
         if (!locationRepository.existsById(fromLocationId)) {
             throw new IllegalArgumentException("Location with ID " + fromLocationId + " does not exist.");

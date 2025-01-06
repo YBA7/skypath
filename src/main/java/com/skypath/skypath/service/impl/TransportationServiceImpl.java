@@ -26,6 +26,7 @@ public class TransportationServiceImpl implements TransportationService {
     private final LocationRepository locationRepository;
 
 
+    //todo unique pk koy buraya origin destination ve type
     @Override
     public Boolean createTransportation(TransportationRequest request) {
         Location origin = locationRepository.findById(request.getOriginId())

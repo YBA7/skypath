@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@RequestMapping("/locaiton")
+@RequestMapping("/location")
 public interface ILocationController {
     @PostMapping(value = "/create", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     ResponseEntity<Boolean> createLocation(@RequestBody @Valid LocationRequest request);
