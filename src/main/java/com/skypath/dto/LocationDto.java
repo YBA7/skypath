@@ -1,5 +1,6 @@
 package com.skypath.dto;
 
+import com.skypath.validation.annotation.ValidLocationType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,7 @@ public class LocationDto {
     private String name;
 
     @NotNull(message = "Location type is required.")
+    @ValidLocationType
     private Integer type;
 
     private Long id;

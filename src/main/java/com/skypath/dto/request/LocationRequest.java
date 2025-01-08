@@ -1,5 +1,6 @@
 package com.skypath.dto.request;
 
+import com.skypath.validation.annotation.ValidLocationType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -17,5 +18,6 @@ public class LocationRequest {
     private String name;
 
     @NotNull(message = "Location type is required.")
+    @ValidLocationType
     private Integer type;
 }

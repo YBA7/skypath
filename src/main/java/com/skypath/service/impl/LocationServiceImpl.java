@@ -60,7 +60,7 @@ public class LocationServiceImpl implements LocationService {
         if (isDuplicate) {
             throw new RuntimeException("Location with the same name and type already exists.");
         }
-        locationMapper.updateEntityFromDto(existingLocation, dto);
+        locationMapper.updateEntityFromDto(dto, existingLocation);
         locationRepository.save(existingLocation);
     }
 
