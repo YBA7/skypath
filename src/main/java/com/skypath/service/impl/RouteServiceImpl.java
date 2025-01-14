@@ -10,8 +10,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -26,17 +28,28 @@ public class RouteServiceImpl implements RouteService {
     public LinkedList<RouteResponse> findRoutes(Long fromLocationId, Long toLocationId) {
         LinkedList<RouteResponse> routes = new LinkedList<>();
         LinkedList<RouteStepDto> currentPath = new LinkedList<>();
+        Set<Long> visitedLocations = new HashSet<>(); //Hali hazırda ziyaret edilenleri de bir sette tutucam ki eğer aynı lokasyona gelirse stackOverFlowu engelleyeyim
         if (!locationRepository.existsById(fromLocationId) || !locationRepository.existsById(toLocationId)) {
             throw new IllegalArgumentException("Location does not exist.");
         }
-        exploreRoutes(fromLocationId, toLocationId, currentPath, routes);
+        exploreRoutes(fromLocationId, toLocationId, currentPath, routes, visitedLocations);
         return routes;
     }
 
-    private void exploreRoutes(Long fromLocationId, Long toLocationId, LinkedList<RouteStepDto> currentPath,
-                               List<RouteResponse> routes) {
+    private void exploreRoutes(Long fromLocationId, Long toLocationId, LinkedList<RouteStepDto> currentPath, List<RouteResponse> routes, Set<Long> visitedLocations) {
+        // başlangıç lokasyonumu  ekledim ilk olarak
+        visitedLocations.add(fromLocationId);
+
         List<Transportation> transportations = transportationRepository.findByOriginId(fromLocationId);
         for (Transportation transportation : transportations) {
+            // destinationId imi en başta alıyorum visitedLocations da kontrol etmek adına.
+            Long destinationId = transportation.getDestination().getId();
+
+            // Eğer hedef daha önce ziyaret edildiyse döngüyü atla diyerek stackoverflowun önüne geçmiş bulundum
+            if (visitedLocations.contains(destinationId)) {
+                continue;
+            }
+
             String type = transportation.getTransportationType() == 1 ? "FLIGHT" : "OTHER";
             RouteStepDto step = new RouteStepDto(
                     transportation.getOrigin().getName(),
@@ -44,15 +57,17 @@ public class RouteServiceImpl implements RouteService {
                     type
             );
             currentPath.addLast(step); // LinkedList'in sonuna ekle
-            if (transportation.getDestination().getId().equals(toLocationId)) {
+            if (destinationId.equals(toLocationId)) {
                 if (isValidRoute(currentPath)) {
                     routes.add(new RouteResponse(new LinkedList<>(currentPath)));
                 }
             } else {
-                exploreRoutes(transportation.getDestination().getId(), toLocationId, currentPath, routes);
+                exploreRoutes(destinationId, toLocationId, currentPath, routes, visitedLocations);
             }
             currentPath.removeLast(); // Geri dönüş için son öğeyi çıkar
         }
+        // geri dönüş sırasında lokasyonu ziyaret edilenlerden kaldır
+        visitedLocations.remove(fromLocationId);
     }
 
     private boolean containsFlight(LinkedList<RouteStepDto> currentPath) {
